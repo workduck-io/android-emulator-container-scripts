@@ -69,7 +69,8 @@ WORKDIR /root
 LABEL maintainer="{{user}}" \
       com.google.android.emulator.version="{{emu_build_id}}"
 
-RUN apt-get -qqy --no-install-recommends install \
+RUN apt-get -qqy update && \
+    apt-get -qqy --no-install-recommends install \
     openjdk-8-jdk \
     ca-certificates \
     tzdata \
@@ -119,10 +120,19 @@ EXPOSE 4723
 COPY wireless_connect.sh \
      wireless_autoconnect.sh \
      nodeconfig-android.json \
+     minicap.sh \
+     stf-binaries-0.2 \
      /root/
 
+WORKDIR stf-binaries-0.2
+
+RUN npm install --unsafe-perm=true --allow-root
+
+WORKDIR ..
+
 RUN chmod +x /root/wireless_connect.sh && \
-    chmod +x /root/wireless_autoconnect.sh 
+    chmod +x /root/wireless_autoconnect.sh && \
+    chmod +x /root/minicap.sh
 
 #========================================
 # Run xvfb and appium server
