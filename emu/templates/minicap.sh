@@ -14,7 +14,7 @@
 
 # This is the forwarding port. Higher ports are preferred as to not interfere
 # with $ADB_PATH's ability to scan for emulators.
-sleep 90
+sleep 180
 ADB_PATH=android/sdk/platform-tools/adb
 ABI=$($ADB_PATH shell getprop ro.product.cpu.abi)
 SDK=$($ADB_PATH shell getprop ro.build.version.sdk)
