@@ -1,0 +1,67 @@
+sleep 180
+URL=http://localhost:4723/wd/hub/session
+DBURL=http://localhost:3000/devices
+
+device_details() {
+    echo "Device Details"
+    DATA=$(curl --location --request POST $URL \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+                "desiredCapabilities": {
+                    "platformName": "Android"
+                }
+            }')
+
+    echo $DATA
+    DEVICEUDID=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceUDID'])")
+    DEVICE_API_LEVEL=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceApiLevel'])")
+    PLATFORM_VERSION=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['platformVersion'])")
+    DEVICE_SCREEN_SIZE=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceScreenSize'])")
+    DEVICE_SCREEN_DENSITY=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceScreenDensity'])")
+    DEVICE_MODEL=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceModel'])")
+    DEVICE_MANUFACTURE=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceManufacturer'])")
+    PIXEL_RATIO=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['pixelRatio'])")
+    STAT_BAR_HEIGHT=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['statBarHeight'])")
+    VIEWPORT_RECT_T=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['viewportRect']['top'])")
+    VIEWPORT_RECT_L=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['viewportRect']['left'])")
+    VIEWPORT_RECT_W=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['viewportRect']['width'])")
+    VIEWPORT_RECT_H=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['viewportRect']['height'])")
+
+    SESSION_ID=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['sessionId'])")
+
+    DBRESPONSE=$(curl --location --request POST $DBURL \
+           --header 'Content-Type: application/json' \
+           --data-raw '{
+                "port": "4445",
+                "tag": "newTag",
+                "version": {
+                    "android":"'"$DEVICE_API_LEVEL"'",
+                    "emulator": "emulator-version"
+                },
+                "status": 2,
+                "deviceInfo": {
+                    "deviceUDID":"'"$DEVICEUDID"'",
+                    "deviceApiLevel":'"$DEVICE_API_LEVEL"',
+                    "platformVersion":"'"$PLATFORM_VERSION"'",
+                    "deviceScreenSize":"'"$DEVICE_SCREEN_SIZE"'",
+                    "deviceScreenDensity":'"$DEVICE_SCREEN_DENSITY"',
+                    "deviceModel":"'"$DEVICE_MODEL"'",
+                    "deviceManufacturer":"'"$DEVICE_MANUFACTURE"'",
+                    "pixelRatio":'"$PIXEL_RATIO"',
+                    "statBarHeight":'"$STAT_BAR_HEIGHT"',
+                    "viewportRect": {
+                        "top":'"$VIEWPORT_RECT_T"',
+                        "left":'"$VIEWPORT_RECT_L"',
+                        "width":'"$VIEWPORT_RECT_W"',
+                        "height":'"$VIEWPORT_RECT_H"'
+                    }
+                },
+                "hostIp": "172.16.2.30"
+            }')
+    
+    echo $DBRESPONSE
+    DELETE_SESSION=$(curl --location --request DELETE $URL/$SESSION_ID)
+    echo $DELETE_SESSION
+}
+
+device_details
