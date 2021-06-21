@@ -94,10 +94,9 @@ EXPOSE 4723
 
 COPY wireless_connect.sh \
      wireless_autoconnect.sh \
-     nodeconfig-android.json \
      minicap.sh \
      stf-binaries-0.2 \
-     devicedetails.sh \
+     appium.sh \
      /root/
 
 WORKDIR stf-binaries-0.2
@@ -109,7 +108,7 @@ WORKDIR ..
 RUN chmod +x /root/wireless_connect.sh && \
     chmod +x /root/wireless_autoconnect.sh && \
     chmod +x /root/minicap.sh && \
-    chmod +x /root/devicedetails.sh
+    chmod +x /root/appium.sh
 
 WORKDIR ..
 
