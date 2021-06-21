@@ -32,8 +32,10 @@ MINICAP_PORT=$(check_socket 1717 2000)
 
 echo $GRPC_PORT $ADB_PORT_ADMIN $ADB_PORT $APPIUM_PORT $MINICAP_PORT
 
+HUB_HOST=$(echo $(ip route show | awk '/docker0/ {print $9}'))
+echo $HUB_HOST
+
 CONTAINER_ID=$1
-HUB_HOST=$2
 docker run \
  --device /dev/kvm \
  --publish $GRPC_PORT:8554/tcp \
@@ -44,7 +46,7 @@ docker run \
  -e TOKEN="$(cat ~/.emulator_console_auth_token)" \
  -e ADBKEY="$(cat ~/.android/adbkey)" \
  -e TURN \
- -e HUB_HOST=$2  \
+ -e HUB_HOST=$HUB_HOST  \
  ${CONTAINER_ID}
 
 sleep 120
