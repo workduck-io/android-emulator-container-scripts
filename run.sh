@@ -14,7 +14,7 @@ GRPC_PORT=$(check_socket 8554 8600)
 ADB_PORT_ADMIN=$(check_socket 5554 5600)
 ADB_PORT=$(expr $ADB_PORT_ADMIN + 1)
 APPIUM_PORT=$(check_socket 4723 4800)
-MINICAP_PORT=$(check_socket 1717 2000)
+MINICAP_PORT=$(check_socket 1720 2000)
 
 echo $GRPC_PORT $ADB_PORT_ADMIN $ADB_PORT $APPIUM_PORT $MINICAP_PORT
 
@@ -28,8 +28,7 @@ sudo nohup docker run \
  --publish $ADB_PORT_ADMIN:5554/tcp \
  --publish $ADB_PORT:5555/tcp \
  --publish $APPIUM_PORT:4723/tcp \
- --publish $MINICAP_PORT:1717/tcp \
- --publish 1720:1720/tcp \
+ --publish $MINICAP_PORT:1720/tcp \
  -e TOKEN="$(cat ~/.emulator_console_auth_token)" \
  -e ADBKEY="$(cat ~/.android/adbkey)" \
  -e TURN \
