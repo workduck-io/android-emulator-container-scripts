@@ -63,3 +63,45 @@
 2021-06-20 17:31:41,001 INFO reaped unknown pid 83
 2021-06-20 17:31:41,001 INFO waiting for appium_script to die
 2021-06-20 17:31:41,003 INFO stopped: appium_script (terminated by SIGTERM)
+2021-06-22 23:51:57,149 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-06-22 23:51:57,154 INFO supervisord started with pid 1
+2021-06-22 23:51:58,183 INFO spawned: 'appium_script' with pid 8
+2021-06-22 23:51:58,280 INFO spawned: 'emulator_script' with pid 9
+2021-06-22 23:51:58,287 INFO spawned: 'mini_script' with pid 10
+2021-06-22 23:51:58,295 INFO spawned: 'minicap_script' with pid 12
+2021-06-22 23:51:59,299 INFO success: appium_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:51:59,300 INFO success: emulator_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:51:59,300 INFO success: mini_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:51:59,300 INFO success: minicap_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:52:04,233 INFO reaped unknown pid 34
+2021-06-22 23:52:04,737 INFO reaped unknown pid 67
+2021-06-22 23:52:23,917 WARN received SIGINT indicating exit request
+2021-06-22 23:52:23,918 INFO waiting for appium_script, emulator_script, mini_script, minicap_script to die
+2021-06-22 23:52:24,049 INFO stopped: minicap_script (terminated by SIGTERM)
+2021-06-22 23:52:24,053 INFO stopped: mini_script (terminated by SIGTERM)
+2021-06-22 23:52:25,056 INFO stopped: emulator_script (terminated by SIGTERM)
+2021-06-22 23:52:25,056 INFO reaped unknown pid 84
+2021-06-22 23:52:25,056 INFO reaped unknown pid 85
+2021-06-22 23:52:25,542 INFO stopped: appium_script (terminated by SIGTERM)
+2021-06-22 23:52:38,300 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-06-22 23:52:38,302 INFO supervisord started with pid 1
+2021-06-22 23:52:39,308 INFO spawned: 'appium_script' with pid 8
+2021-06-22 23:52:39,310 INFO spawned: 'emulator_script' with pid 9
+2021-06-22 23:52:39,314 INFO spawned: 'mini_script' with pid 11
+2021-06-22 23:52:39,317 INFO spawned: 'minicap_script' with pid 19
+2021-06-22 23:52:39,453 INFO reaped unknown pid 46
+2021-06-22 23:52:39,463 INFO reaped unknown pid 73
+2021-06-22 23:52:40,467 INFO success: appium_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:52:40,467 INFO success: emulator_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:52:40,469 INFO success: mini_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:52:40,469 INFO success: minicap_script entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-06-22 23:53:27,335 WARN received SIGINT indicating exit request
+2021-06-22 23:53:27,656 INFO waiting for appium_script, emulator_script, mini_script, minicap_script to die
+2021-06-22 23:53:27,788 INFO stopped: minicap_script (terminated by SIGTERM)
+2021-06-22 23:53:27,882 INFO stopped: mini_script (terminated by SIGTERM)
+2021-06-22 23:53:28,989 INFO stopped: emulator_script (exit status 0)
+2021-06-22 23:53:28,989 INFO reaped unknown pid 84
+2021-06-22 23:53:28,990 INFO reaped unknown pid 85
+2021-06-22 23:53:28,990 INFO reaped unknown pid 86
+2021-06-22 23:53:28,991 INFO reaped unknown pid 87
+2021-06-22 23:53:29,995 INFO stopped: appium_script (terminated by SIGTERM)

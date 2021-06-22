@@ -92,6 +92,7 @@ class EmulatorContainer(DockerContainer):
         writer.write_template("stf-binaries-0.2/package.json", {})
         writer.write_template("minicap.sh", {})
         writer.write_template("appium.sh", {})
+        writer.write_template("index.js", {})
 
         writer.write_template(
             "Dockerfile.emulator",
