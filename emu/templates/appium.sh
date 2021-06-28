@@ -4,7 +4,8 @@ NODECONFIG='{
             {
             "maxInstances": 1,
             "platformName": "Android",
-            "automationName": "UiAutomator2"
+            "automationName": "UiAutomator2",
+            "deviceId": "'"$DEVICE_ID"'"
             }
         ],
         "configuration":

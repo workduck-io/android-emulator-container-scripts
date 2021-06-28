@@ -21,6 +21,8 @@ echo $GRPC_PORT $ADB_PORT_ADMIN $ADB_PORT $APPIUM_PORT $MINICAP_PORT
 HUB_HOST=$(echo $(ip route show | awk '/docker0/ {print $9}'))
 echo $HUB_HOST
 
+DEVICE_ID=$(echo $(nanoid))
+
 CONTAINER_ID=$1
 sudo nohup docker run \
  --device /dev/kvm \
@@ -32,7 +34,8 @@ sudo nohup docker run \
  -e TOKEN="$(cat ~/.emulator_console_auth_token)" \
  -e ADBKEY="$(cat ~/.android/adbkey)" \
  -e TURN \
- -e HUB_HOST=$HUB_HOST  \
+ -e HUB_HOST=$HUB_HOST \
+ -e DEVICE_ID=$DEVICE_ID \
  ${CONTAINER_ID} &
 
 sleep 180
@@ -50,7 +53,7 @@ device_details() {
             }')
 
     echo $DATA
-    DEVICEUDID=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceUDID'])")
+
     DEVICE_API_LEVEL=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceApiLevel'])")
     PLATFORM_VERSION=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['platformVersion'])")
     DEVICE_SCREEN_SIZE=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceScreenSize'])")
@@ -74,11 +77,11 @@ device_details() {
                 "tag": "newTag",
                 "version": {
                     "android":"'"$DEVICE_API_LEVEL"'",
-                    "emulator": "emulator-version"
+                    "emulator": "emulator-linux_x64-7324830"
                 },
                 "status": 2,
                 "deviceInfo": {
-                    "deviceUDID":"'"$DEVICEUDID"'",
+                    "deviceUDID":"'"$DEVICE_ID"'",
                     "deviceApiLevel":'"$DEVICE_API_LEVEL"',
                     "platformVersion":"'"$PLATFORM_VERSION"'",
                     "deviceScreenSize":"'"$DEVICE_SCREEN_SIZE"'",
@@ -94,7 +97,7 @@ device_details() {
                         "height":'"$VIEWPORT_RECT_H"'
                     }
                 },
-                "hostIp": "172.16.2.30"
+                "hostIp": "'"$HUB_HOST"'"
             }')
     
     echo $DBRESPONSE
