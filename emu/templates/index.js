@@ -1,23 +1,23 @@
 var net = require('net');
 
-const sourceport = 1720;
-const destport = 1717;
+// parse "80" and "localhost:80" or even "42mEANINg-life.com:80"
+var addrRegex = /^(([a-zA-Z\-\.0-9]+):)?(\d+)$/;
 
-net.createServer(function (s) {
-    var buff = "";
-    var connected = false;
-    var cli = net.createConnection(destport);
-    s.on('data', function (d) {
-        if (connected) {
-            cli.write(d);
-        } else {
-            buff += d.toString();
-        }
+var addr = {
+    from: addrRegex.exec(process.argv[2]),
+    to: addrRegex.exec(process.argv[3])
+};
+
+if (!addr.from || !addr.to) {
+    console.log('Usage: <from> <to>');
+    return;
+}
+
+net.createServer(function(from) {
+    var to = net.createConnection({
+        host: addr.to[2],
+        port: addr.to[3]
     });
-    cli.on('connect', function () {
-        connected = true;
-        console.log(buff);
-        cli.write(buff);
-    });
-    cli.pipe(s);
-}).listen(sourceport);
+    from.pipe(to);
+    to.pipe(from);
+}).listen(addr.from[3], addr.from[2]);
