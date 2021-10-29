@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 VERBOSE=3
+ANDROID_AVD_HOME=/root/.android/avd
 
 # Return the value of a given named variable.
 # $1: variable name
@@ -111,6 +112,9 @@ install_adb_keys() {
     echo "-----BEGIN PRIVATE KEY-----" >/root/.android/adbkey
     echo $ADBKEY | tr " " "\\n" | sed -n "4,29p" >>/root/.android/adbkey
     echo "-----END PRIVATE KEY-----" >>/root/.android/adbkey
+  elif [ ! -z "${ADBKEY_PUB}" ]; then
+    echo "emulator: Using provided adb public key"
+    echo $ADBKEY_PUB >>/root/.android/adbkey.pub
   else
     echo "emulator: No adb key provided, creating internal one, you might not be able connect from adb."
     run /android/sdk/platform-tools/adb keygen /root/.android/adbkey
@@ -182,10 +186,10 @@ initialize_data_part() {
   # and if so, we will use that as our avd directory.
   if  is_mounted /data; then
     run cp -fr /android-home/ /data
-    ln -sf /data/android-home /root/.android/avd
-    echo "path=/root/.android/avd/Pixel2.avd" > /root/.android/avd/Pixel2.ini
+    ln -sf /data/android-home ${ANDROID_AVD_HOME}
+    echo "path=${ANDROID_AVD_HOME}/Pixel2.avd" > ${ANDROID_AVD_HOME}/Pixel2.ini
   else
-    ln -sf /android-home /root/.android/avd
+    ln -sf /android-home ${ANDROID_AVD_HOME}
   fi
 }
 
@@ -218,7 +222,9 @@ var_append LAUNCH_CMD -avd Pixel2
 var_append LAUNCH_CMD -ports 5556,5557 -grpc 8554 -no-window
 var_append LAUNCH_CMD -skip-adb-auth -no-snapshot-save -wipe-data -no-boot-anim
 var_append LAUNCH_CMD -shell-serial file:/tmp/android-unknown/kernel.log
+var_append LAUNCH_CMD -logcat "*:V"
 var_append LAUNCH_CMD -logcat-output /tmp/android-unknown/logcat.log
+var_append LAUNCH_CMD -logcat "*:V"
 var_append LAUNCH_CMD -feature AllowSnapshotMigration
 var_append LAUNCH_CMD -gpu swiftshader_indirect {{extra}}
 
