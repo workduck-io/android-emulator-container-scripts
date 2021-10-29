@@ -14,9 +14,8 @@ GRPC_PORT=$(check_socket 8554 8600)
 ADB_PORT_ADMIN=$(check_socket 5554 5600)
 ADB_PORT=$(expr $ADB_PORT_ADMIN + 1)
 APPIUM_PORT=$(check_socket 4723 4800)
-MINICAP_PORT=$(check_socket 1720 2000)
 
-echo $GRPC_PORT $ADB_PORT_ADMIN $ADB_PORT $APPIUM_PORT $MINICAP_PORT
+echo $GRPC_PORT $ADB_PORT_ADMIN $ADB_PORT $APPIUM_PORT
 
 HUB_HOST=$(echo $(ip route show | awk '/docker0/ {print $9}'))
 echo $HUB_HOST
@@ -30,7 +29,6 @@ sudo nohup docker run \
  --publish $ADB_PORT_ADMIN:5554/tcp \
  --publish $ADB_PORT:5555/tcp \
  --publish $APPIUM_PORT:4723/tcp \
- --publish $MINICAP_PORT:1720/tcp \
  -e TOKEN="$(cat ~/.emulator_console_auth_token)" \
  -e ADBKEY="$(cat ~/.android/adbkey)" \
  -e TURN \
@@ -72,7 +70,7 @@ device_details() {
     DBRESPONSE=$(curl --location --request POST $DBURL \
            --header 'Content-Type: application/json' \
            --data-raw '{
-                "port": "'"$MINICAP_PORT"'",
+                "port": "'"1720"'",
                 "tag": "newTag",
                 "version": {
                     "android":"'"$DEVICE_API_LEVEL"'",

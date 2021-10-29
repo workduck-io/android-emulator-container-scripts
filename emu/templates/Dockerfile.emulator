@@ -96,7 +96,6 @@ EXPOSE 1717
 
 COPY wireless_connect.sh \
     wireless_autoconnect.sh \
-    minicap.sh \
     stf-binaries-0.2 \
     appium.sh \
     index.js \
@@ -110,7 +109,6 @@ WORKDIR ..
 
 RUN chmod +x /root/wireless_connect.sh && \
     chmod +x /root/wireless_autoconnect.sh && \
-    chmod +x /root/minicap.sh && \
     chmod +x /root/appium.sh
 
 WORKDIR ..
