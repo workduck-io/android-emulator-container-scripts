@@ -96,16 +96,8 @@ EXPOSE 1717
 
 COPY wireless_connect.sh \
     wireless_autoconnect.sh \
-    stf-binaries-0.2 \
     appium.sh \
-    index.js \
     /root/
-
-WORKDIR stf-binaries-0.2
-
-RUN npm install --unsafe-perm=true --allow-root
-
-WORKDIR ..
 
 RUN chmod +x /root/wireless_connect.sh && \
     chmod +x /root/wireless_autoconnect.sh && \
