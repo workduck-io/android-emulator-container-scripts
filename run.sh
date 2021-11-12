@@ -14,6 +14,7 @@ GRPC_PORT=$(check_socket 8554 8600)
 ADB_PORT_ADMIN=$(check_socket 5554 5600)
 ADB_PORT=$(expr $ADB_PORT_ADMIN + 1)
 APPIUM_PORT=$(check_socket 4723 4800)
+PORT=1720
 
 echo $GRPC_PORT $ADB_PORT_ADMIN $ADB_PORT $APPIUM_PORT
 
@@ -32,13 +33,13 @@ sudo nohup docker run \
  -e TOKEN="$(cat ~/.emulator_console_auth_token)" \
  -e ADBKEY="$(cat ~/.android/adbkey)" \
  -e TURN \
- -e HUB_HOST=$HUB_HOST \
+ -e HUB_HOST=$HUB_HOST  \
  -e DEVICE_ID=$DEVICE_ID \
  ${CONTAINER_ID} &
 
-sleep 180
+sleep 120
 URL=http://localhost:$APPIUM_PORT/wd/hub/session
-DBURL=http://localhost:3000/devices
+DBURL=http://api.workduck.io/testing/device
 
 device_details() {
     echo "Device Details"
@@ -51,6 +52,7 @@ device_details() {
             }')
 
     echo $DATA
+    DEVICEUDID=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceUDID'])")
     DEVICE_API_LEVEL=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceApiLevel'])")
     PLATFORM_VERSION=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['platformVersion'])")
     DEVICE_SCREEN_SIZE=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['value']['deviceScreenSize'])")
@@ -66,35 +68,27 @@ device_details() {
 
     SESSION_ID=$(echo $DATA | python3 -c "import sys, json; print(json.load(sys.stdin)['sessionId'])")
 
-    echo $DEVICE_API_LEVEL $DEVICE_MANUFACTURE $DEVICE_SCREEN_SIZE $DEVICEUDID 
+    echo $DEVICE_ID $DEVICE_API_LEVEL $DEVICE_MANUFACTURE $DEVICE_SCREEN_SIZE $DEVICEUDID 
     DBRESPONSE=$(curl --location --request POST $DBURL \
            --header 'Content-Type: application/json' \
            --data-raw '{
-                "port": "'"1720"'",
-                "tag": "newTag",
-                "version": {
-                    "android":"'"$DEVICE_API_LEVEL"'",
-                    "emulator": "emulator-linux_x64-7324830"
+                "deviceId":"'"$DEVICE_ID"'",
+                "deviceUDID":"'"$DEVICEUDID"'",
+                "deviceApiLevel":'"$DEVICE_API_LEVEL"',
+                "platformVersion":"'"$PLATFORM_VERSION"'",
+                "deviceScreenSize":"'"$DEVICE_SCREEN_SIZE"'",
+                "deviceScreenDensity":'"$DEVICE_SCREEN_DENSITY"',
+                "deviceModel":"'"$DEVICE_MODEL"'",
+                "deviceManufacturer":"'"$DEVICE_MANUFACTURE"'",
+                "pixelRatio":'"$PIXEL_RATIO"',
+                "statBarHeight":'"$STAT_BAR_HEIGHT"',
+                "viewportRect": {
+                    "top":'"$VIEWPORT_RECT_T"',
+                    "left":'"$VIEWPORT_RECT_L"',
+                    "width":'"$VIEWPORT_RECT_W"',
+                    "height":'"$VIEWPORT_RECT_H"'
                 },
-                "status": 2,
-                "deviceInfo": {
-                    "deviceUDID":"'"$DEVICE_ID"'",
-                    "deviceApiLevel":'"$DEVICE_API_LEVEL"',
-                    "platformVersion":"'"$PLATFORM_VERSION"'",
-                    "deviceScreenSize":"'"$DEVICE_SCREEN_SIZE"'",
-                    "deviceScreenDensity":'"$DEVICE_SCREEN_DENSITY"',
-                    "deviceModel":"'"$DEVICE_MODEL"'",
-                    "deviceManufacturer":"'"$DEVICE_MANUFACTURE"'",
-                    "pixelRatio":'"$PIXEL_RATIO"',
-                    "statBarHeight":'"$STAT_BAR_HEIGHT"',
-                    "viewportRect": {
-                        "top":'"$VIEWPORT_RECT_T"',
-                        "left":'"$VIEWPORT_RECT_L"',
-                        "width":'"$VIEWPORT_RECT_W"',
-                        "height":'"$VIEWPORT_RECT_H"'
-                    }
-                },
-                "hostIp": "'"$HUB_HOST"'"
+                "port":'"$PORT"'
             }')
     
     echo $DBRESPONSE
@@ -103,3 +97,5 @@ device_details() {
 }
 
 device_details
+# sleep 30
+# device_details
