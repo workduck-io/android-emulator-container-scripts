@@ -151,7 +151,7 @@ install_grpc_certs() {
 clean_up() {
   # Delete any leftovers from hard exits.
   run rm -rf /tmp/*
-  run rm -rf ${ANDROID_AVD_HOME}/Pixel2.avd/*.lock
+  run rm -rf ${ANDROID_AVD_HOME}/${DEVICE_NAME}.avd/*.lock
 
   # Check for core-dumps, that might be left over
   if ls core* 1>/dev/null 2>&1; then
@@ -187,7 +187,7 @@ initialize_data_part() {
   if  is_mounted /data; then
     run cp -fr /android-home/ /data
     ln -sf /data/android-home ${ANDROID_AVD_HOME}
-    echo "path=${ANDROID_AVD_HOME}/Pixel2.avd" > ${ANDROID_AVD_HOME}/Pixel2.ini
+    echo "path=${ANDROID_AVD_HOME}/${DEVICE_NAME}.avd" > ${ANDROID_AVD_HOME}/${DEVICE_NAME}.ini
   else
     ln -sf /android-home ${ANDROID_AVD_HOME}
   fi
@@ -206,7 +206,7 @@ forward_loggers
 # Override config settings that the user forcefully wants to override.
 if [ ! -z "${AVD_CONFIG}" ]; then
   echo "Adding ${AVD_CONFIG} to config.ini"
-  echo "${AVD_CONFIG}" >>"${ANDROID_AVD_HOME}/Pixel2.avd/config.ini"
+  echo "${AVD_CONFIG}" >>"${ANDROID_AVD_HOME}/${DEVICE_NAME}.avd/config.ini"
 fi
 
 # Launch internal adb server, needed for our health check.
@@ -218,7 +218,7 @@ socat -d tcp-listen:5555,reuseaddr,fork tcp:127.0.0.1:5557 &
 
 # Basic launcher command, additional flags can be added.
 LAUNCH_CMD=emulator/emulator
-var_append LAUNCH_CMD -avd Pixel2
+var_append LAUNCH_CMD -avd ${DEVICE_NAME}
 var_append LAUNCH_CMD -ports 5556,5557 -grpc 8554 -no-window
 var_append LAUNCH_CMD -skip-adb-auth -no-snapshot-save -wipe-data -no-boot-anim
 var_append LAUNCH_CMD -shell-serial file:/tmp/android-unknown/kernel.log
