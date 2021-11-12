@@ -22,6 +22,7 @@ HUB_HOST=$(echo $(ip route show | awk '/docker0/ {print $9}'))
 echo $HUB_HOST
 
 DEVICE_ID=$(echo $(nanoid))
+DEVICE_NAME=Pixel3
 
 CONTAINER_ID=$1
 sudo nohup docker run \
@@ -35,6 +36,7 @@ sudo nohup docker run \
  -e TURN \
  -e HUB_HOST=$HUB_HOST  \
  -e DEVICE_ID=$DEVICE_ID \
+ -e DEVICE_NAME=$DEVICE_NAME \
  ${CONTAINER_ID} &
 
 sleep 120
