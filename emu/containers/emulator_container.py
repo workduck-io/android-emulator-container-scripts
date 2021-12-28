@@ -89,9 +89,9 @@ class EmulatorContainer(DockerContainer):
         writer.write_template("launch-emulator.sh", {"extra": self.extra, "version": emu.__version__})
         writer.write_template("default.pa", {})
         writer.write_template("supervisor.conf", {})
-        writer.write_template("wireless_connect.sh", {})
-        writer.write_template("wireless_autoconnect.sh", {})
-        writer.write_template("appium.sh", {})
+        # writer.write_template("wireless_connect.sh", {})
+        # writer.write_template("wireless_autoconnect.sh", {})
+        # writer.write_template("appium.sh", {})
 
         writer.write_template(
             "Dockerfile.emulator",
